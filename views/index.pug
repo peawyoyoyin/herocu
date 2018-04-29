@@ -1,6 +1,9 @@
 h1 herocu
 if user
-  p1 logged in as #{user.username}
+  p logged in as #{user.username}
+  br
+  a(href="/newrepo") new repository
+  br
   a(href="/logout") logout
 else
   a(href="/login") login

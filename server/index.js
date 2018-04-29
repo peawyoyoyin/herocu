@@ -7,6 +7,7 @@ const passport = require('passport')
 
 const app = express()
 app.set('view engine', 'pug')
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(session({ 
@@ -22,8 +23,24 @@ app.get('/', (req, res) => {
   if(req.user !== undefined) {
     renderOptions.user = req.user
   }
-  console.log(renderOptions)
+  // console.log(renderOptions)
   res.render('index', renderOptions)
+})
+
+app.get('/newrepo', (req, res) => {
+  if(!req.isAuthenticated()) res.redirect('/login')
+  else {
+    res.render('new-repo')
+  }
+})
+
+app.post('/newrepo', (req, res) => {
+  if(!req.isAuthenticated()) res.status(401)
+  else {
+    const repositoryName = req.body.name
+    console.log(`new repository ${req.user.username}\\${repositoryName}`)
+    res.redirect('/')
+  }
 })
 
 app.get('/login', (req, res) => {
@@ -35,7 +52,8 @@ app.post('/login', passport.authenticate('local', {
   }), 
   (req, res) => {
     res.redirect('/')
-  })
+  }
+)
 
 app.get('/logout', (req, res) => {
   req.logout()
@@ -44,8 +62,4 @@ app.get('/logout', (req, res) => {
 
 app.listen(8080, () => {
   console.log('listening on port 8080')
-  console.log('creating test git repo')
-  const gitRepo = require('./git')
-  const repo = new gitRepo({name: 'test'})
-  repo.init(console.log)
 })
