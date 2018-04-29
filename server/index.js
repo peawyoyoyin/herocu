@@ -44,4 +44,8 @@ app.get('/logout', (req, res) => {
 
 app.listen(8080, () => {
   console.log('listening on port 8080')
+  console.log('creating test git repo')
+  const gitRepo = require('./git')
+  const repo = new gitRepo({name: 'test'})
+  repo.init(console.log)
 })
