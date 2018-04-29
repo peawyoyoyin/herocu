@@ -43,6 +43,11 @@ app.post('/newrepo', (req, res) => {
   }
 })
 
+app.get('/viewrepo/:reponame', (req, res) => {
+  const repositoryName = req.params.reponame
+  res.render('view-repo', {repository: {name: repositoryName}})
+})
+
 app.get('/login', (req, res) => {
   res.render('login')
 })
