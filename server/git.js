@@ -5,9 +5,9 @@ const fs = require('fs')
 class GitRepository {
   constructor(options) {
     if(!fs.existsSync(path.resolve(`./repositories/${options.username}`))) {
-      fs.mkdir(`./repositories/${options.username}`)
+      fs.mkdirSync(`./repositories/${options.username}`)
     }
-    this._git = new git({ 'git-dir': path.resolve(`./repositories/${options.username}/${options.name}.git`) })
+    this._git = new git({ 'git-dir': path.resolve(`./repositories/${options.username}/${options.name}.git`), bare: true })
   }
 
   init(callback) {
