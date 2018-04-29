@@ -5,7 +5,11 @@ const session = require('express-session')
 const initPassport = require('./passport')
 const passport = require('passport')
 
+const login = require('./routes/login')
+const repository = require('./routes/repository')
+
 const app = express()
+
 app.set('view engine', 'pug')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -27,38 +31,8 @@ app.get('/', (req, res) => {
   res.render('index', renderOptions)
 })
 
-app.get('/newrepo', (req, res) => {
-  if(!req.isAuthenticated()) res.redirect('/login')
-  else {
-    res.render('new-repo')
-  }
-})
-
-app.post('/newrepo', (req, res) => {
-  if(!req.isAuthenticated()) res.status(401)
-  else {
-    const repositoryName = req.body.name
-    console.log(`new repository ${req.user.username}\\${repositoryName}`)
-    res.redirect('/')
-  }
-})
-
-app.get('/viewrepo/:reponame', (req, res) => {
-  const repositoryName = req.params.reponame
-  res.render('view-repo', {repository: {name: repositoryName}})
-})
-
-app.get('/login', (req, res) => {
-  res.render('login')
-})
-
-app.post('/login', passport.authenticate('local', {
-  failureRedirect: '/login',
-  }), 
-  (req, res) => {
-    res.redirect('/')
-  }
-)
+app.use('/login', login)
+app.use('/repo', repository)
 
 app.get('/logout', (req, res) => {
   req.logout()
