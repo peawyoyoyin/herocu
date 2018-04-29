@@ -15,7 +15,7 @@ const passport = require('passport')
 
 const login = require('./routes/login')
 const repository = require('./routes/repository')
-
+const newUser = require('./routes/new-user')
 
 const app = express()
 
@@ -42,6 +42,7 @@ app.get('/', (req, res) => {
 
 app.use('/login', login)
 app.use('/repo', repository)
+app.use('/newuser', newUser)
 
 app.get('/logout', (req, res) => {
   req.logout()
