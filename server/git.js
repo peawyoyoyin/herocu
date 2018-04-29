@@ -1,9 +1,13 @@
 const git = require('git-wrapper')
 const path = require('path')
+const fs = require('fs')
 
 class GitRepository {
   constructor(options) {
-    this._git = new git({ 'git-dir': path.resolve(`./repositories/${options.name}.git`) })
+    if(!fs.existsSync(path.resolve(`./repositories/${options.username}`))) {
+      fs.mkdir(`./repositories/${options.username}`)
+    }
+    this._git = new git({ 'git-dir': path.resolve(`./repositories/${options.username}/${options.name}.git`) })
   }
 
   init(callback) {

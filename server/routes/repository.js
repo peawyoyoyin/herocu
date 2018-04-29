@@ -1,6 +1,8 @@
 const express = require('express')
 const passport = require('passport')
 
+const git = require('../git')
+
 const router = express.Router()
 
 router.get('/new', (req, res) => {
@@ -15,6 +17,11 @@ router.post('/new', (req, res) => {
   else {
     const repositoryName = req.body.name
     console.log(`new repository ${req.user.username}\\${repositoryName}`)
+    const repo = new git({
+      name: `${repositoryName}`,
+      username: req.user.username
+    })
+    repo.init((err, msg) => console.log(msg))
     res.redirect('/')
   }
 })

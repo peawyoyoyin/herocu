@@ -1,13 +1,14 @@
 const express = require('express')
 const passport = require('passport')
 
+
 const router = express.Router()
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
   res.render('login')
 })
 
-app.post('/', passport.authenticate('local', {
+router.post('/', passport.authenticate('local', {
   failureRedirect: '/login',
   }), 
   (req, res) => {
