@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
+const initPassport = require('./passport')
+const passport = require('passport')
 
 const app = express()
 app.set('view engine', 'pug')
@@ -13,38 +15,7 @@ app.use(session({
   saveUninitialized: false,
 }))
 
-
-const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy
-
-passport.use(new LocalStrategy(
-  (username, password, done) => {
-    console.log(`login attempt with user: ${username}, password: ${password}`)
-    if(username === 'admin' && password === 'admin') {
-      console.log('login success!')
-      return done(null, {
-        username: 'admin',
-        password: 'admin'
-      })
-    }
-    console.log('login failed')
-    return done(null, false, {message: 'incorrect ID or password'})
-  }
-))
-
-passport.serializeUser((user, done) => {
-  done(null, user)
-})
-
-passport.deserializeUser((user, done) => {
-  done(null, {
-    username: 'admin',
-    password: 'admin'
-  })
-})
-
-app.use(passport.initialize())
-app.use(passport.session())
+initPassport(app)
 
 app.get('/', (req, res) => {
   let renderOptions = {}
@@ -65,6 +36,11 @@ app.post('/login', passport.authenticate('local', {
   (req, res) => {
     res.redirect('/')
   })
+
+app.get('/logout', (req, res) => {
+  req.logout()
+  res.redirect('/')
+})
 
 app.listen(8080, () => {
   console.log('listening on port 8080')
