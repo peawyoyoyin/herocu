@@ -1,18 +1,19 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
+const users = require('./aws/users')
 
 passport.use(new LocalStrategy(
   (username, password, done) => {
     console.log(`login attempt with user: ${username}, password: ${password}`)
-    if(username === 'admin' && password === 'admin') {
-      console.log('login success!')
-      return done(null, {
-        username: 'admin',
-        password: 'admin'
+    users.verifyUser(username, password).then(() => {
+      console.log('login success')
+      done(null, {
+        username, password
       })
-    }
-    console.log('login failed')
-    return done(null, false, {message: 'incorrect ID or password'})
+    }).catch(err => {
+      console.log('login failed with error: ', err)
+      done(null, false, { message: 'incorrect ID or password' })
+    })
   }
 ))
 
