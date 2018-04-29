@@ -35,6 +35,24 @@ const verifyUser = (username, password) => {
   })
 }
 
+const newUser = (username, password) => {
+  const params = {
+    TableName: 'herocu-users',
+    Item: {
+      username: { S: username },
+      password: { S: password },
+    }
+  }
+
+  return new Promise((resolve, reject) => {
+    userDB.putItem(params, (err, data) => {
+      if(err) reject(err)
+      else resolve(data)
+    })
+  })
+}
+
 module.exports = {
-  verifyUser
+  verifyUser,
+  newUser
 }

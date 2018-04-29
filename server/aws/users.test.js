@@ -12,6 +12,18 @@ const testVerifyUser = (username, password) => {
     })
 }
 
+const testNewUser = (username, password) => {
+  users.newUser(username, password)
+    .then(data => {
+      console.log('newUser success!', data)
+    })
+    .catch(err => {
+      console.log('newUser error: ', err)
+    })
+}
+
 testVerifyUser('admin', 'admin')
 testVerifyUser('admin', 'wrong')
 testVerifyUser('nonexistent', 'anything')
+testNewUser('peaw', 'yoyoyin')
+testNewUser('peaw', 'yoyoyin2')
