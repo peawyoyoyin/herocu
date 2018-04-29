@@ -8,6 +8,14 @@ const passport = require('passport')
 const login = require('./routes/login')
 const repository = require('./routes/repository')
 
+try {
+  require('./aws/config')()
+} catch(e) {
+  console.error('error importing config.')
+  console.error('make sure server/aws/config.js exist.\nIf it\'s not, create one using server/aws/config.default.js as an example.')
+  process.exit(1)
+}
+
 const app = express()
 
 app.set('view engine', 'pug')
