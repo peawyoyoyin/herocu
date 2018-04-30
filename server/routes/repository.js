@@ -1,6 +1,8 @@
 const express = require('express')
 const passport = require('passport')
 
+const repoDB = require('../aws/repositories')
+
 const git = require('../git')
 
 const router = express.Router()
@@ -17,16 +19,24 @@ router.post('/new', (req, res) => {
   else {
     const repositoryName = req.body.name
     console.log(`new repository ${req.user.username}\\${repositoryName}`)
-    const repo = new git({
-      name: `${repositoryName}`,
-      username: req.user.username
-    })
-    repo.init((err, msg) => console.log(msg))
+    repoDB.createNewRepository(req.user.username, repositoryName)
+      .then(
+        () => {
+          const repo = new git({
+            name: `${repositoryName}`,
+            username: req.user.username
+          })
+          repo.init((err, msg) => console.log(msg))
+        }
+      )
+      .catch(err => {
+        console.log('error on creating new repository:', err)
+      })
     res.redirect('/')
   }
 })
   
-router.get('/view/:reponame', (req, res) => {
+router.get('/view/:username/:reponame', (req, res) => {
   const repositoryName = req.params.reponame
   res.render('view-repo', {repository: {name: repositoryName}})
 })

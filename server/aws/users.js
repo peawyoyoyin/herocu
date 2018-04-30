@@ -1,6 +1,6 @@
 const aws = require('aws-sdk')
 
-userDB = new aws.DynamoDB({region: 'ap-northeast-1'})
+userDB = new aws.DynamoDB({ region: 'ap-northeast-1' })
 
 const getUser = (username) => {
   const params = {
