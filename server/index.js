@@ -17,6 +17,8 @@ const login = require('./routes/login')
 const repository = require('./routes/repository')
 const newUser = require('./routes/new-user')
 
+const repoDB = require('./aws/repositories')
+
 const app = express()
 
 app.set('view engine', 'pug')
@@ -31,10 +33,12 @@ app.use(session({
 
 initPassport(app)
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
   let renderOptions = {}
   if(req.user !== undefined) {
     renderOptions.user = req.user
+    const userRepos = await repoDB.getRepositoriesOfUser(req.user.username)
+    renderOptions.user.repos = userRepos
   }
   // console.log(renderOptions)
   res.render('index', renderOptions)

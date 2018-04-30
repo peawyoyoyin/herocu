@@ -27,18 +27,29 @@ router.post('/new', (req, res) => {
             username: req.user.username
           })
           repo.init((err, msg) => console.log(msg))
+          res.redirect('/')
         }
       )
       .catch(err => {
         console.log('error on creating new repository:', err)
+        res.redirect('/')
       })
-    res.redirect('/')
   }
 })
   
 router.get('/view/:username/:reponame', (req, res) => {
-  const repositoryName = req.params.reponame
-  res.render('view-repo', {repository: {name: repositoryName}})
+  const repo = new git({username: req.params.username, name: req.params.reponame})
+  repo.listFiles((err, msg) => {
+    if(err) {
+      res.status(404).end()
+    }
+    
+    const files = msg.split('\n').slice(0, -1).map(line => {
+      const [mode, type, hash, name] = line.split(/\s+/)
+      return { mode, type, hash, name }
+    })
+    res.render('view-repo', { repository: { username: req.params.username, name: req.params.reponame, files } })
+  })
 })
 
 module.exports = router

@@ -5,6 +5,13 @@ if user
   a(href="/repo/new") new repository
   br
   a(href="/logout") logout
+  br
+  if user.repos.length > 0
+    p repositories
+    ul
+      each repo in user.repos
+        li 
+          a(href=`/repo/view/${repo.username}/${repo.repositoryName}`) #{repo.repositoryName}
 else
   a(href="/login") login
   br

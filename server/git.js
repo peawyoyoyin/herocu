@@ -14,8 +14,8 @@ class GitRepository {
     this._git.exec('init', callback)
   }
 
-  listFiles(callback) {
-    this._git.exec('ls-files', callback)
+  listFiles(callback, branch='master') {
+    this._git.exec(`ls-tree ${branch}`, callback)
   }
 }
 module.exports = GitRepository
