@@ -1,13 +1,25 @@
-h1 #{repository.username} / #{repository.name}
-p clone this repository by running
-br
-code git clone git@docker.ppjetcement.com:herocu/repositories/#{repository.username}/#{repository.name}.git
-if repository.ecsTaskID
-  h6 project is running on ECS with taskID #{repository.ecsTaskID}
-if repository.files.length > 0
-  h3 files
-  ul
-    each file in repository.files
-      li #{file.name} #{file.type === 'tree' ? '/' : ''}
-else
-  h3 empty
+extends common/layout
+block content
+  nav
+    span.mb-0 repository
+    ol.mt-0.pt-0.pl-0.breadcrumb.bg-transparent
+      li.breadcrumb-item(style="font-size: 1.5em; font-weight: bold;") #{repository.username}
+      li.breadcrumb-item(style="font-size: 1.5em; font-weight: bold;") #{repository.name}
+  .row
+    span.pr-2 clone this repository:
+    span.text-monospace.mb-4 git clone git@docker.ppjetcement.com:herocu/repositories/#{repository.username}/#{repository.name}.git
+  if repository.ecsTaskID
+    .alert.alert-success
+      | project is running on ECS with taskID #{repository.ecsTaskID}.
+      a.ml-4(href=`/repo/stop-task/${repository.username}/${repository.name}`) stop it.
+  if repository.files.length > 0
+    h3 Files
+    ul.list-group.w-50
+      each file in repository.files
+        li.list-group-item 
+          i.mr-2(class=(file.type === 'tree' ? 'fas fa-folder' : 'far fa-file') style="width: 1.5rem;") 
+          | #{file.name} 
+  else
+    h3 Files
+    p.pl-4.text-muted(style="user-select: none;") This repository has no files. Start pushing now!
+    

@@ -1,5 +1,7 @@
-h1 New Repository
-form(method="POST")
-  label(for="name") Repository Name
-  input(type="text" name="name")
-  button(type="submit") Create
+extends common/layout
+block content
+  h1 New Repository
+  form(method="POST")
+    label(for="name") Repository Name
+    input(type="text" name="name")
+    button(type="submit") Create

@@ -5,7 +5,7 @@ const users = require('../aws/users')
 const router = express.Router()
 
 router.get('/', (req, res) => {
-  res.render('login')
+  res.render('new-user')
 })
 
 router.post('/', (req, res) => {

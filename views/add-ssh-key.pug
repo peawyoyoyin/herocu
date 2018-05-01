@@ -1,10 +1,12 @@
-h1 Add SSH Key
-p Add your SSH key to the server.
-p This will allow you to use git to push to the server or pull from the server.
-br
-form(method="POST")
-  label(for="content") copy your content of your public key file here.
+extends common/layout
+block content
+  h1 Add SSH Key
+  p Add your SSH key to the server.
+  p This will allow you to use git to push to the server or pull from the server.
   br
-  textarea(name="content", cols="30", rows="2")
-  br
-  button(type="submit") submit
+  form(method="POST")
+    label(for="content") copy your content of your public key file here.
+    br
+    textarea(name="content", cols="30", rows="2")
+    br
+    button(type="submit") submit

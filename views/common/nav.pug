@@ -1,0 +1,16 @@
+block nav
+  ul.nav.herocu-nav.py-3.pl-3.border-bottom.mb-3
+    li.nav-item 
+      a.herocu-nav-logo(href="/") heroCU
+    .nav.ml-auto.my-auto.mr-4
+      if user
+        li.nav-item.mr-4
+          span logged in as #{user.username}
+        li.nav-item.mr-4
+          a(href="/logout") logout
+      else
+        li.nav-item.mr-4
+          a(href="/newuser") sign up
+        li.nav-item.mr-4
+          a(href="/login") login
+        

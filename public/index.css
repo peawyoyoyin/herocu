@@ -1,0 +1,15 @@
+.herocu-nav {
+  background: linear-gradient(50deg, #fcecfc 0%,#fba6e1 100%);
+}
+
+.herocu-nav a {
+  color: black;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.herocu-nav .herocu-nav-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-decoration: none;
+}

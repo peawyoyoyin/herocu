@@ -1,7 +1,9 @@
-h1 New User
-form(method="post")
-  label(for="username") username
-  input(type="text" name="username")
-  label(for="password") password
-  input(type="text" name="password")
-  button(type="submit") create
+extends common/layout
+block content
+  form.form-control.col-4.mx-auto.p-4(method="POST")
+    h4.mb-4 Create Account
+    label.mr-2(for="username") Username
+    input.mr-4.mb-3.form-control(type="text" name="username")
+    label.mr-2(for="password") Password
+    input.mr-4.mb-4.form-control(type="text" name="password")
+    button.btn.btn-primary(type="submit") Sign up

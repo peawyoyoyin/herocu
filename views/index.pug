@@ -1,20 +1,29 @@
-h1 herocu
-if user
-  p logged in as #{user.username}
-  br
-  a(href="/repo/new") new repository
-  br
-  a(href="/logout") logout
-  br
-  if user.repos.length > 0
-    p repositories
-    ul
-      each repo in user.repos
-        li 
-          a(href=`/repo/view/${repo.username}/${repo.repositoryName}`) #{repo.repositoryName}
-          if repo.task
-            a(href=`/repo/stop-task/${repo.username}/${repo.repositoryName}`) stop running ECS task
-else
-  a(href="/login") login
-  br
-  a(href="/newuser") create new user
+extends common/layout
+block content
+  h1 heroCU index page
+  if user
+    p 
+      | Hello, 
+      span.font-weight-bold #{user.username}
+      | !
+    br
+    if user.repos.length > 0
+      .row
+        .col.d-flex.flex-row
+          h6 Your Repositories
+          a(href="/repo/new").d-inline-block.ml-4
+            h6 new
+      ul.list-group
+        each repo in user.repos
+          li.list-group-item.w-50.d-flex.justify-content-between
+            a(href=`/repo/view/${repo.username}/${repo.repositoryName}`) #{repo.repositoryName}
+            .ml-auto
+              if repo.task
+                span.badge.badge-success.mx-1 running
+                a.badge(href=`/repo/stop-task/${repo.username}/${repo.repositoryName}`) stop
+  else
+    p Welcome to heroCU!.
+    p to start using, 
+    a(href="/login") login 
+    span or 
+    a(href="/newuser") create new user

@@ -1,0 +1,11 @@
+html
+  head
+    title #{title || 'herocu'}
+    link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css")
+    link(rel="stylesheet", href="https://use.fontawesome.com/releases/v5.0.10/css/all.css")
+    block styles
+      link(rel="stylesheet", href="/static/index.css")
+  body
+    include nav.pug
+    .container
+      block content
