@@ -10,8 +10,10 @@ block content
     span.text-monospace.mb-4 git clone git@docker.ppjetcement.com:herocu/repositories/#{repository.username}/#{repository.name}.git
   if repository.ecsTaskID
     .alert.alert-success
-      | project is running on ECS with taskID #{repository.ecsTaskID}.
-      a.ml-4(href=`/repo/stop-task/${repository.username}/${repository.name}`) stop it.
+      | project is running on ECS 
+      if user && user.username === repository.username
+        | with taskID #{repository.ecsTaskID}.
+        a.ml-4(href=`/repo/stop-task/${repository.username}/${repository.name}`) stop it.
   if repository.files.length > 0
     h3 Files
     ul.list-group.w-50
@@ -21,5 +23,5 @@ block content
           | #{file.name} 
   else
     h3 Files
-    p.pl-4.text-muted(style="user-select: none;") This repository has no files. Start pushing now!
+    p.pl-4.text-muted(style="user-select: none;") This repository has no files.
     

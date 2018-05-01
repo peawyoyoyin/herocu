@@ -12,7 +12,7 @@ const router = express.Router()
 router.get('/new', (req, res) => {
   if(!req.isAuthenticated()) res.redirect('/login')
   else {
-    res.render('new-repo')
+    res.render('new-repo', { user: req.user })
   }
 })
 
@@ -73,7 +73,7 @@ router.get('/view/:username/:reponame', (req, res) => {
     })
 
     const ecsTaskID = repo.getECStaskID()
-    res.render('view-repo', { repository: { username: req.params.username, name: req.params.reponame, files, ecsTaskID } })
+    res.render('view-repo', { user: req.user, repository: { username: req.params.username, name: req.params.reponame, files, ecsTaskID } })
   })
 })
 
