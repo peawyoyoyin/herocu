@@ -1,3 +1,4 @@
 node_modules
 repositories
 server/aws/config.js
+server/config/index.js

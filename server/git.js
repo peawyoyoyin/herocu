@@ -37,6 +37,7 @@ class GitRepository {
       return null
     }
   }
+
   
   _removeAWStaskinfo() {
     const AWSTaskInfoFilePath = `./repositories/${this.username}/${this.name}.git/awstaskinfo`

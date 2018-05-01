@@ -1,10 +1,12 @@
 try {
-  require('./aws/config')()
+  require('./config')()
 } catch(e) {
   console.error('error importing config.')
-  console.error('make sure server/aws/config.js exist.\nIf it\'s not, create one using server/aws/config.default.js as an example.')
+  console.error('make sure server/config/index.js exist.\nIf it\'s not, create one using server/config/index.default.js as an example.')
   process.exit(1)
 }
+
+const config = require('./config')
 
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -16,6 +18,7 @@ const passport = require('passport')
 const login = require('./routes/login')
 const repository = require('./routes/repository')
 const newUser = require('./routes/new-user')
+const addSSHKey = require('./routes/add-ssh-key')
 
 const repoDB = require('./aws/repositories')
 const git = require('./git')
@@ -58,12 +61,13 @@ app.get('/', async (req, res) => {
 app.use('/login', login)
 app.use('/repo', repository)
 app.use('/newuser', newUser)
+app.use('/add-ssh-key', addSSHKey)
 
 app.get('/logout', (req, res) => {
   req.logout()
   res.redirect('/')
 })
 
-app.listen(8080, () => {
-  console.log('listening on port 8080')
+app.listen(config.server.port, () => {
+  console.log(`listening on port ${config.server.port}`)
 })
