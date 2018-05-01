@@ -5,9 +5,12 @@ echo ================================
 echo Building your code...
 echo $(pwd)
 current=$(pwd)
-cd $HOME
-repo_name="$(basename -s .git "$current")"
+tmpdir="$HOME/herocu/tmp"
+basedir="$HOME/herocu/base"
+cd $tmpdir
+repo_name="$(echo $current | grep -oE "\w*/\w*.git$" | sed 's/.\{4\}$//' | sed 's/\//__/g')"
 echo $repo_name
+mkdir -p $repo_name
 git clone $current $repo_name
 cd $repo_name
 cat Dockerfile
@@ -16,13 +19,22 @@ docker push docker.ppjetcement.com/$repo_name
 echo Successfully built your code
 echo ================================
 echo Generating docker-compose.yml...
-cp $HOME/base-compose.yml ./base-compose.yml
-cp $HOME/compose_generator.py ./compose_generator.py
-cp $HOME/ecs-params.yml ./ecs-params.yml
+cp $basedir/base-compose.yml ./base-compose.yml
+cp $basedir/compose_generator.py ./compose_generator.py
+cp $basedir/ecs-params.yml ./ecs-params.yml
 python compose_generator.py docker.ppjetcement.com/$repo_name
 echo Deploying on AWS ECS...
-ecs-cli compose up
+ecs-cli compose -p $repo_name up
 echo ================================
 echo Cleaning up...
 cd $current
-rm -rf $HOME/$repo_name
+rm -rf $tmpdir/$repo_name
+ip_addr="$(ecs-cli ps | grep $repo_name | grep RUNNING | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])')"
+http="Your project is at: http://$ip_addr"
+if [ $(echo $ip_addr | wc -m) -lt 1 ]; then
+	echo "No IP addresses for your project found. Deploy failed...";
+else
+	echo $http;
+fi
+echo "finished"
+ecs-cli ps | grep $repo_name | grep RUNNING > awstaskinfo 
