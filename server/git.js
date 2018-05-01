@@ -23,7 +23,9 @@ class GitRepository {
   }
 
   installHooks(hookFilePath, options = {}) {
-    fs.copyFileSync(hookFilePath, path.resolve(`./repositories/${this.username}/${this.name}.git/hooks/post-receive`))
+    const dest = `./repositories/${this.username}/${this.name}.git/hooks/post-receive`
+    fs.copyFileSync(hookFilePath, path.resolve(dest))
+    fs.chmodSync(path.resolve(dest), '+x')
   }
 }
 module.exports = GitRepository
