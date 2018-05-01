@@ -26,8 +26,11 @@ router.post('/new', (req, res) => {
             name: `${repositoryName}`,
             username: req.user.username
           })
-          repo.init((err, msg) => console.log(msg))
-          res.redirect('/')
+          repo.init((err, msg) => {
+            console.log(msg)
+            repo.installHooks('./server/hook-prototype/post-receive')
+            res.redirect('/')            
+          })
         }
       )
       .catch(err => {

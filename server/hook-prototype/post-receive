@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+echo Welcome to HeroCU!
+echo ================================
+echo Building your code...
+echo $(pwd)
+current=$(pwd)
+cd $HOME
+repo_name="$(basename -s .git "$current")"
+echo $repo_name
+git clone $current $repo_name
+cd $repo_name
+cat Dockerfile
+docker build -t docker.ppjetcement.com/$repo_name .
+docker push docker.ppjetcement.com/$repo_name
+echo Successfully built your code
+echo ================================
+echo Generating docker-compose.yml...
+cp $HOME/base-compose.yml ./base-compose.yml
+cp $HOME/compose_generator.py ./compose_generator.py
+cp $HOME/ecs-params.yml ./ecs-params.yml
+python compose_generator.py docker.ppjetcement.com/$repo_name
+echo Deploying on AWS ECS...
+ecs-cli compose up
+echo ================================
+echo Cleaning up...
+cd $current
+rm -rf $HOME/$repo_name
