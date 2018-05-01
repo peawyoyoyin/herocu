@@ -1,6 +1,7 @@
 try {
   require('./config')()
 } catch(e) {
+  console.log(e)
   console.error('error importing config.')
   console.error('make sure server/config/index.js exist.\nIf it\'s not, create one using server/config/index.default.js as an example.')
   process.exit(1)

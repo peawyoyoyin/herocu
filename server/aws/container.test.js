@@ -1,4 +1,4 @@
-require('./config')()
+require('../config')()
 const aws = require('aws-sdk')
 const ecs = new aws.ECS({ region: 'us-east-1', credentials: new aws.SharedIniFileCredentials({ profile: 'herocu-ecs' }) })
 ecs.listTasks({cluster: 'herocu'}, (err, tasks) => {
