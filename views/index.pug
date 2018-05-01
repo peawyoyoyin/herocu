@@ -12,6 +12,8 @@ if user
       each repo in user.repos
         li 
           a(href=`/repo/view/${repo.username}/${repo.repositoryName}`) #{repo.repositoryName}
+          if repo.task
+            a(href=`/repo/stop-task/${repo.username}/${repo.repositoryName}`) stop running ECS task
 else
   a(href="/login") login
   br

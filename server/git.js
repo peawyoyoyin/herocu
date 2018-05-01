@@ -27,5 +27,31 @@ class GitRepository {
     fs.copyFileSync(hookFilePath, path.resolve(dest))
     fs.chmodSync(path.resolve(dest), '+x')
   }
+
+  _readAWStaskinfo() {
+    console.log(`reading awstaskinfo from ${path.resolve(`./repositories/${this.username}/${this.name}.git/awstaskinfo`)}`)
+    const AWSTaskInfoFilePath = `./repositories/${this.username}/${this.name}.git/awstaskinfo`
+    if(fs.existsSync(AWSTaskInfoFilePath)) {
+      return fs.readFileSync(AWSTaskInfoFilePath)
+    } else {
+      return null
+    }
+  }
+  
+  _removeAWStaskinfo() {
+    const AWSTaskInfoFilePath = `./repositories/${this.username}/${this.name}.git/awstaskinfo`
+    if(fs.existsSync(AWSTaskInfoFilePath)) {
+      fs.renameSync(AWSTaskInfoFilePath, AWSTaskInfoFilePath+'.stopped')
+    }
+  }
+
+  getECStaskID() {
+    const AWSTaskInfoRaw = this._readAWStaskinfo()
+    if(AWSTaskInfoRaw === null) {
+      return null
+    }
+    const [ target, status, address, name ] = AWSTaskInfoRaw.toString().split(/\s+/)
+    return target.split('/')[0]
+  }
 }
 module.exports = GitRepository

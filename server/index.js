@@ -18,6 +18,7 @@ const repository = require('./routes/repository')
 const newUser = require('./routes/new-user')
 
 const repoDB = require('./aws/repositories')
+const git = require('./git')
 
 const app = express()
 
@@ -37,7 +38,17 @@ app.get('/', async (req, res) => {
   let renderOptions = {}
   if(req.user !== undefined) {
     renderOptions.user = req.user
-    const userRepos = await repoDB.getRepositoriesOfUser(req.user.username)
+    let userRepos = await repoDB.getRepositoriesOfUser(req.user.username)
+    userRepos = userRepos.map(repoinfo => {
+      const repo = new git({ username: req.user.username, name: repoinfo.repositoryName })
+      if(repo.getECStaskID() !== null) {
+        return {
+          task: true,
+          ...repoinfo,
+        }
+      }
+      return repoinfo
+    })
     renderOptions.user.repos = userRepos
   }
   // console.log(renderOptions)

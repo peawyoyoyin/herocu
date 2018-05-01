@@ -1,4 +1,9 @@
 h1 #{repository.username} / #{repository.name}
+p clone this repository by running
+br
+code git clone git@docker.ppjetcement.com:herocu/repositories/#{repository.username}/#{repository.name}.git
+if repository.ecsTaskID
+  h6 project is running on ECS with taskID #{repository.ecsTaskID}
 if repository.files.length > 0
   h3 files
   ul
